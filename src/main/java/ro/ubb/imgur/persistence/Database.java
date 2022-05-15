@@ -1,6 +1,7 @@
 package ro.ubb.imgur.persistence;
 
 import ro.ubb.imgur.model.Account;
+import ro.ubb.imgur.model.Picture;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -60,6 +61,46 @@ public class Database {
             } else {
                 return null;
             }
+        } catch (Exception error) {
+            throw new RuntimeException(error);
+        }
+    }
+
+    public static void createPicture(String filePath, long accountId) {
+        String sql = "INSERT INTO picture (file_path, account_id) VALUES (?, ?)";
+
+        try (
+                Connection connection = connect();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, filePath);
+            statement.setLong(2, accountId);
+            statement.executeUpdate();
+        } catch (Exception error) {
+            throw new RuntimeException(error);
+        }
+    }
+
+    public static List<Picture> getAllPictures() {
+        String query = "SELECT id, file_path, account_id, total_votes FROM picture";
+
+        try (
+                Connection connection = connect();
+                Statement statement = connection.createStatement()
+        ) {
+            ResultSet resultSet = statement.executeQuery(query);
+            ArrayList<Picture> pictures = new ArrayList<>();
+
+            while (resultSet.next()) {
+                long id = resultSet.getInt("id");
+                String filePath = resultSet.getString("file_path");
+                long accountId = resultSet.getLong("account_id");
+                long totalVotes = resultSet.getLong("total_votes");
+                pictures.add(new Picture(id, filePath, accountId, totalVotes));
+            }
+
+            return pictures;
+
         } catch (Exception error) {
             throw new RuntimeException(error);
         }

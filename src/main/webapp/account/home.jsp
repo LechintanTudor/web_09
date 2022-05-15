@@ -1,5 +1,6 @@
 <%@ page import="ro.ubb.imgur.model.Account" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Imgur - Home</title>
