@@ -1,4 +1,4 @@
-package ro.ubb.imgur.controller;
+package ro.ubb.imgur.page;
 
 import ro.ubb.imgur.model.Account;
 import ro.ubb.imgur.persistence.Database;
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "myAccount", value = "/accounts/me")
-public class MyAccountController extends HttpServlet {
+@WebServlet(name = "home", value = "/home")
+public class HomePage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
@@ -20,16 +20,20 @@ public class MyAccountController extends HttpServlet {
         Account account = Database.authenticate(username, password);
 
         try {
-            if (account != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("account", account);
+            if (account == null) {
+                getServletContext()
+                        .getRequestDispatcher("/account/login-error.jsp")
+                        .forward(request, response);
 
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("home.jsp");
-                requestDispatcher.forward(request, response);
-            } else {
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("login-error.jsp");
-                requestDispatcher.forward(request, response);
+                return;
             }
+
+            HttpSession session = request.getSession();
+            session.setAttribute("account", account);
+
+            getServletContext()
+                    .getRequestDispatcher("/account/home.jsp")
+                    .forward(request, response);
         } catch (Exception error) {
             throw new RuntimeException(error);
         }

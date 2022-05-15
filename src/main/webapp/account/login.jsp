@@ -5,7 +5,7 @@
     <title>Imgur - Login</title>
 </head>
 <body>
-    <form action="accounts/me" method="post">
+    <form action="${pageContext.request.contextPath}/home" method="post">
         <label for="username-input">Username:</label>
         <input id="username-input" type="text" name="username">
         <label for="password-input">Password:</label>

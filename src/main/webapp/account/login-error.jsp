@@ -6,6 +6,6 @@
 <body>
     <h1>Authentication Error</h1>
     <p>Failed to authenticate</p>
-    <a href="login.jsp">Return to login page</a>
+    <a href="${pageContext.request.contextPath}/account/login.jsp">Return to login page</a>
 </body>
 </html>
