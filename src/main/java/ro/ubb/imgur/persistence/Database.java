@@ -105,4 +105,35 @@ public class Database {
             throw new RuntimeException(error);
         }
     }
+
+    public static boolean submitVote(long accountId, long pictureId, long voteValue) {
+        String pictureQuery = "SELECT account_id FROM picture WHERE id = ?";
+        String voteSql = String.format(
+                "CALL usp_remove_vote(%d, %d); CALL usp_submit_vote(%d, %d, %d)",
+                accountId, pictureId, accountId, pictureId, voteValue
+        );
+
+        try (
+                Connection connection = connect();
+                PreparedStatement pictureStatement = connection.prepareStatement(pictureQuery);
+                PreparedStatement voteStatement = connection.prepareStatement(voteSql)
+        ) {
+            pictureStatement.setLong(1, pictureId);
+            ResultSet pictureResultSet = pictureStatement.executeQuery();
+
+            if (!pictureResultSet.next()) {
+                return false;
+            }
+
+            long oldAccountId = pictureResultSet.getLong("account_id");
+            if (oldAccountId == accountId) {
+                return false;
+            }
+
+            voteStatement.execute();
+            return true;
+        } catch (Exception error) {
+            throw new RuntimeException(error);
+        }
+    }
 }

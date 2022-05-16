@@ -5,12 +5,14 @@
     <title>Imgur - Login</title>
 </head>
 <body>
-    <form action="${pageContext.request.contextPath}/home" method="post">
-        <label for="username-input">Username:</label>
-        <input id="username-input" type="text" name="username">
-        <label for="password-input">Password:</label>
-        <input id="password-input" type="password" name="password">
-        <input type="submit" value="Login">
-    </form>
+<h1>Imgur Login</h1>
+<h2>Java is a boilerplate-driven language designed for writing verbose object-oriented instant-legacy code</h2>
+<form action="${pageContext.request.contextPath}/home" method="post">
+    <label for="username-input">Username:</label>
+    <input id="username-input" type="text" name="username">
+    <label for="password-input">Password:</label>
+    <input id="password-input" type="password" name="password">
+    <input type="submit" value="Login">
+</form>
 </body>
 </html>

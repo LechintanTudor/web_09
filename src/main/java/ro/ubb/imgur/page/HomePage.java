@@ -3,7 +3,6 @@ package ro.ubb.imgur.page;
 import ro.ubb.imgur.model.Account;
 import ro.ubb.imgur.persistence.Database;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

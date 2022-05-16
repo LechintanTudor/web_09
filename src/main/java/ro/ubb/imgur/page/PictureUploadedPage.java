@@ -18,7 +18,7 @@ public class PictureUploadedPage extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        Account account = (Account)request.getSession().getAttribute("account");
+        Account account = (Account) request.getSession().getAttribute("account");
 
         try {
             if (account == null) {

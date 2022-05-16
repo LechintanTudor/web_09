@@ -18,7 +18,7 @@ public class PictureData extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
 
-        Account account = (Account)request.getSession().getAttribute("account");
+        Account account = (Account) request.getSession().getAttribute("account");
 
         try {
             if (account == null) {
@@ -41,6 +41,29 @@ public class PictureData extends HttpServlet {
 
             PrintWriter out = new PrintWriter(response.getOutputStream(), true);
             out.println(picturesJSON);
+        } catch (Exception error) {
+            throw new RuntimeException(error);
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        Account account = (Account) request.getSession().getAttribute("account");
+
+        try {
+            if (account == null) {
+                PrintWriter out = new PrintWriter(response.getOutputStream(), true);
+                out.println("null");
+                return;
+            }
+
+            byte[] bodyBytes = request.getInputStream().readAllBytes();
+            String body = new String(bodyBytes);
+            JSONObject bodyJSON = new JSONObject(body);
+            System.out.println(body);
+
+            long pictureId = bodyJSON.getLong("pictureId");
+            long voteValue = bodyJSON.getLong("voteValue");
+            Database.submitVote(account.id, pictureId, voteValue);
         } catch (Exception error) {
             throw new RuntimeException(error);
         }
