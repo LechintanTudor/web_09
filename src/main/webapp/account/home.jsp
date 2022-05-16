@@ -11,6 +11,7 @@
     out.println(String.format("<h1>Welcome back, %s</h1>", account.username));
 %>
 <ul>
+    <li><a href="${pageContext.request.contextPath}/pictures/ranked">Highest voted pictures</a></li>
     <li><a href="${pageContext.request.contextPath}/pictures/gallery">Picture gallery</a></li>
     <li><a href="${pageContext.request.contextPath}/pictures/upload">Upload picture</a></li>
     <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>

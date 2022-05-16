@@ -2,6 +2,7 @@ package ro.ubb.imgur.persistence;
 
 import ro.ubb.imgur.model.Account;
 import ro.ubb.imgur.model.Picture;
+import ro.ubb.imgur.model.PictureWithStats;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -132,6 +133,29 @@ public class Database {
 
             voteStatement.execute();
             return true;
+        } catch (Exception error) {
+            throw new RuntimeException(error);
+        }
+    }
+
+    public static List<PictureWithStats> getHighestVotedPictures(long limit) {
+        String query = "SELECT file_path, account.username AS author_name, total_votes FROM picture INNER JOIN account ON account_id = account.id ORDER BY total_votes DESC LIMIT " + limit;
+
+        try (
+                Connection connection = connect();
+                Statement statement = connection.createStatement()
+        ) {
+            ResultSet resultSet = statement.executeQuery(query);
+            ArrayList<PictureWithStats> pictureWithStats = new ArrayList<>();
+
+            while (resultSet.next()) {
+                String filePath = resultSet.getString("file_path");
+                String authorName = resultSet.getString("author_name");
+                long totalVotes = resultSet.getLong("total_votes");
+                pictureWithStats.add(new PictureWithStats(filePath, authorName, totalVotes));
+            }
+
+            return pictureWithStats;
         } catch (Exception error) {
             throw new RuntimeException(error);
         }
